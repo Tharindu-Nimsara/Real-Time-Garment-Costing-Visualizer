@@ -1,4 +1,12 @@
-import express, { json } from 'express';
+import express, { json } from "express";
+import dotenv from "dotenv";
+import connectDB from "./src/config/db.js";
+import quoteRoutes from "./src/routes/quoteRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
+
+dotenv.config();
+connectDB();
+
 const app = express();
 const PORT = 5000;
 
@@ -6,9 +14,12 @@ const PORT = 5000;
 app.use(json());
 
 // Basic Route
-app.get('/', (req, res) => {
-  res.send('API is running...');
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
+
+app.use("/api/quotes", quoteRoutes);
+app.use("/api/users", userRoutes);
 
 // Start Server
 app.listen(PORT, () => {
