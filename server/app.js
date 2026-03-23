@@ -12,9 +12,7 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "")
 
 const wildcardToRegex = (pattern) =>
   new RegExp(
-    `^${pattern
-      .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
-      .replace(/\*/g, ".*")}$`,
+    `^${pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`,
   );
 
 const allowedOriginRegexes = allowedOrigins
