@@ -1,29 +1,12 @@
-import express, { json } from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 import connectDB from "./src/config/db.js";
-import quoteRoutes from "./src/routes/quoteRoutes.js";
-import userRoutes from "./src/routes/userRoutes.js";
+import app from "./app.js";
 
 dotenv.config();
-connectDB();
-
-const app = express();
 const PORT = 5000;
 
-// Middleware to parse JSON
-app.use(cors());
-app.use(json());
-
-// Basic Route
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-app.use("/api/quotes", quoteRoutes);
-app.use("/api/users", userRoutes);
-
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
 });
