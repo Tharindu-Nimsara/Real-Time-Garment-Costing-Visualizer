@@ -28,24 +28,24 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-ink-900 border-b border-ink-700">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between h-14 gap-2">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-7 h-7 bg-clay-400 rounded flex items-center justify-center group-hover:bg-clay-300 transition-colors">
             <Scissors size={14} className="text-white" />
           </div>
-          <span className="font-display text-cream text-base font-semibold tracking-wide">
+          <span className="hidden sm:inline font-display text-cream text-base font-semibold tracking-wide">
             M.S.R. Apparels
           </span>
         </Link>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 min-w-0">
           {NAV_LINKS.map(({ to, label, icon: Icon }) => {
             const active = pathname === to;
             return (
               <Link
                 key={to}
                 to={to}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-body transition-all ${active ? "bg-clay-500 text-cream" : "text-ink-300 hover:text-cream hover:bg-ink-700"}`}
+                className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded text-xs sm:text-sm font-body transition-all ${active ? "bg-clay-500 text-cream" : "text-ink-300 hover:text-cream hover:bg-ink-700"}`}
               >
                 <Icon size={14} />
                 <span className="hidden sm:inline">{label}</span>
@@ -54,7 +54,7 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.slice(1).map(({ to }, i) => {
               const active = pathname === to;
@@ -100,7 +100,7 @@ export default function Navbar() {
           <button
             onClick={handleLogout}
             title="Sign out"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-ink-400 hover:text-cream hover:bg-ink-700 transition-all text-xs"
+            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded text-ink-400 hover:text-cream hover:bg-ink-700 transition-all text-xs"
           >
             <LogOut size={13} />
             <span className="hidden sm:inline">Logout</span>

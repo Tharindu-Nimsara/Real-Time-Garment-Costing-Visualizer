@@ -49,14 +49,14 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-cream pt-14">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
-        <div className="flex items-end justify-between mb-8 animate-fade-up opacity-0-init">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 animate-fade-up opacity-0-init">
           <div>
             <p className="text-ink-400 text-sm uppercase tracking-widest mb-1">
               Garment Costing System
             </p>
-            <h1 className="font-display text-4xl font-semibold text-ink-900 leading-tight">
+            <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink-900 leading-tight">
               Dashboard
             </h1>
           </div>
@@ -162,7 +162,7 @@ export default function Dashboard() {
           </h2>
 
           {designs.length === 0 ? (
-            <div className="bg-white rounded-xl border border-dashed border-ink-200 p-16 text-center">
+            <div className="bg-white rounded-xl border border-dashed border-ink-200 p-8 sm:p-16 text-center">
               <p className="text-ink-400 text-sm">No designs yet.</p>
               <Link
                 to="/design"
@@ -224,7 +224,10 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <button
-                        onClick={() => handleLoad(design)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLoad(design);
+                        }}
                         className="flex items-center gap-1.5 text-xs text-clay-600 hover:text-clay-700 font-medium transition-colors"
                       >
                         Open <ArrowRight size={12} />

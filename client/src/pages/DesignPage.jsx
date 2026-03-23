@@ -2,22 +2,37 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import GarmentPreview from "../components/GarmentPreview";
 import CostSummaryCard from "../components/CostSummaryCard";
-import { GARMENT_TYPES, GARMENT_COLORS, FABRIC_TYPES, FABRIC_MATERIALS } from "../data/costData";
+import {
+  GARMENT_TYPES,
+  GARMENT_COLORS,
+  FABRIC_TYPES,
+  FABRIC_MATERIALS,
+} from "../data/costData";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
 function SectionLabel({ children }) {
-  return <p className="text-xs uppercase tracking-widest text-ink-400 mb-3 font-medium">{children}</p>;
+  return (
+    <p className="text-xs uppercase tracking-widest text-ink-400 mb-3 font-medium">
+      {children}
+    </p>
+  );
 }
 
 export default function DesignPage() {
   const navigate = useNavigate();
   const {
-    garmentType, setGarmentType,
-    garmentColor, setGarmentColor,
-    hasLogo, setHasLogo,
-    logoPosition, setLogoPosition,
-    fabricType, setFabricType,
-    fabricMaterial, setFabricMaterial,
+    garmentType,
+    setGarmentType,
+    garmentColor,
+    setGarmentColor,
+    hasLogo,
+    setHasLogo,
+    logoPosition,
+    setLogoPosition,
+    fabricType,
+    setFabricType,
+    fabricMaterial,
+    setFabricMaterial,
   } = useApp();
 
   const handleReset = () => {
@@ -30,28 +45,35 @@ export default function DesignPage() {
 
   return (
     <div className="min-h-screen bg-cream pt-14">
-      <div className="max-w-7xl mx-auto px-6 py-10">
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
-        <div className="flex items-end justify-between mb-8 animate-fade-up opacity-0-init">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 animate-fade-up opacity-0-init">
           <div>
-            <p className="text-ink-400 text-xs uppercase tracking-widest mb-1">Step 01</p>
-            <h1 className="font-display text-4xl font-semibold text-ink-900">Design Garment</h1>
+            <p className="text-ink-400 text-xs uppercase tracking-widest mb-1">
+              Step 01
+            </p>
+            <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink-900">
+              Design Garment
+            </h1>
           </div>
-          <button onClick={handleReset} className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-700 transition-colors">
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-700 transition-colors"
+          >
             <RotateCcw size={13} /> Reset
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
           {/* Left: Controls */}
-          <div className="lg:col-span-2 space-y-6 animate-fade-up opacity-0-init" style={{ animationDelay: "100ms" }}>
-
+          <div
+            className="lg:col-span-2 space-y-6 animate-fade-up opacity-0-init"
+            style={{ animationDelay: "100ms" }}
+          >
             {/* Garment Type */}
             <div className="bg-white rounded-xl border border-ink-100 p-5">
               <SectionLabel>Garment Type</SectionLabel>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {GARMENT_TYPES.map((g) => (
                   <button
                     key={g.id}
@@ -78,16 +100,29 @@ export default function DesignPage() {
                     title={c.label}
                     onClick={() => setGarmentColor(c.hex)}
                     className={`w-9 h-9 rounded-full border-2 transition-all hover:scale-110 ${
-                      garmentColor === c.hex ? "border-clay-500 scale-110" : "border-transparent"
+                      garmentColor === c.hex
+                        ? "border-clay-500 scale-110"
+                        : "border-transparent"
                     }`}
-                    style={{ backgroundColor: c.hex, boxShadow: c.hex === "#FFFFFF" ? "inset 0 0 0 1px #e5e3dc" : "none" }}
+                    style={{
+                      backgroundColor: c.hex,
+                      boxShadow:
+                        c.hex === "#FFFFFF"
+                          ? "inset 0 0 0 1px #e5e3dc"
+                          : "none",
+                    }}
                   />
                 ))}
               </div>
               <div className="flex items-center gap-2 mt-4">
                 <span className="text-xs text-ink-400">Selected:</span>
-                <div className="w-4 h-4 rounded-full border border-ink-200" style={{ backgroundColor: garmentColor }} />
-                <code className="text-xs text-ink-500 font-mono">{garmentColor}</code>
+                <div
+                  className="w-4 h-4 rounded-full border border-ink-200"
+                  style={{ backgroundColor: garmentColor }}
+                />
+                <code className="text-xs text-ink-500 font-mono">
+                  {garmentColor}
+                </code>
                 <input
                   type="color"
                   value={garmentColor}
@@ -128,10 +163,16 @@ export default function DesignPage() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 ${fabricMaterial === m.id ? "border-ink-900 bg-ink-900" : "border-ink-300"}`} />
-                      <span className="text-sm font-medium text-ink-700">{m.label}</span>
+                      <div
+                        className={`w-4 h-4 rounded-full border-2 ${fabricMaterial === m.id ? "border-ink-900 bg-ink-900" : "border-ink-300"}`}
+                      />
+                      <span className="text-sm font-medium text-ink-700">
+                        {m.label}
+                      </span>
                     </div>
-                    <span className="font-mono text-sm text-ink-500">Rs. {m.pricePerKg.toLocaleString()}/kg</span>
+                    <span className="font-mono text-sm text-ink-500">
+                      Rs. {m.pricePerKg.toLocaleString()}/kg
+                    </span>
                     <input
                       type="radio"
                       name="fabric"
@@ -154,13 +195,17 @@ export default function DesignPage() {
                     onClick={() => setHasLogo(!hasLogo)}
                     className={`w-10 h-5 rounded-full transition-colors relative ${hasLogo ? "bg-clay-500" : "bg-ink-200"}`}
                   >
-                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${hasLogo ? "translate-x-5" : "translate-x-0.5"}`} />
+                    <div
+                      className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${hasLogo ? "translate-x-5" : "translate-x-0.5"}`}
+                    />
                   </div>
-                  <span className="text-sm text-ink-600">{hasLogo ? "On" : "Off"}</span>
+                  <span className="text-sm text-ink-600">
+                    {hasLogo ? "On" : "Off"}
+                  </span>
                 </label>
               </div>
               {hasLogo && (
-                <div className="grid grid-cols-3 gap-2 animate-fade-in opacity-0-init">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 animate-fade-in opacity-0-init">
                   {["chest", "back", "sleeve"].map((pos) => (
                     <button
                       key={pos}
@@ -180,13 +225,20 @@ export default function DesignPage() {
           </div>
 
           {/* Right: Preview + Cost */}
-          <div className="space-y-5 animate-fade-up opacity-0-init" style={{ animationDelay: "200ms" }}>
+          <div
+            className="space-y-5 animate-fade-up opacity-0-init"
+            style={{ animationDelay: "200ms" }}
+          >
             {/* Garment Preview */}
-            <div className="bg-white rounded-xl border border-ink-100 p-6 flex flex-col items-center">
-              <p className="text-xs uppercase tracking-widest text-ink-400 mb-4 self-start">Live Preview</p>
+            <div className="bg-white rounded-xl border border-ink-100 p-4 sm:p-6 flex flex-col items-center">
+              <p className="text-xs uppercase tracking-widest text-ink-400 mb-4 self-start">
+                Live Preview
+              </p>
               <div
-                className="rounded-xl p-6 w-full flex items-center justify-center transition-all duration-300"
-                style={{ background: `linear-gradient(135deg, ${garmentColor}18, ${garmentColor}35)` }}
+                className="rounded-xl p-4 sm:p-6 w-full flex items-center justify-center transition-all duration-300"
+                style={{
+                  background: `linear-gradient(135deg, ${garmentColor}18, ${garmentColor}35)`,
+                }}
               >
                 <GarmentPreview
                   color={garmentColor}

@@ -15,12 +15,16 @@ import { Printer, ArrowLeft, Download, Scissors } from "lucide-react";
 function Row({ label, value, sub }) {
   return (
     <tr className="border-b border-ink-100 last:border-0">
-      <td className="py-2.5 text-sm text-ink-500 pr-8 w-1/2">{label}</td>
-      <td className="py-2.5 text-sm font-mono text-ink-900 text-right">
+      <td className="py-2.5 text-xs sm:text-sm text-ink-500 pr-3 sm:pr-8 w-1/2">
+        {label}
+      </td>
+      <td className="py-2.5 text-xs sm:text-sm font-mono text-ink-900 text-right break-words">
         {value}
       </td>
       {sub && (
-        <td className="py-2.5 text-xs text-ink-400 text-right pl-3">{sub}</td>
+        <td className="py-2.5 text-xs text-ink-400 text-right pl-2 sm:pl-3">
+          {sub}
+        </td>
       )}
     </tr>
   );
@@ -69,23 +73,23 @@ export default function ResultPage() {
   return (
     <div className="min-h-screen bg-cream pt-14">
       {/* Toolbar (no-print) */}
-      <div className="no-print max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
+      <div className="no-print max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <button
           onClick={() => navigate("/costing")}
           className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-700 transition-colors"
         >
           <ArrowLeft size={13} /> Back to Costing
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-ink-200 rounded-lg text-ink-700 hover:bg-ink-50 transition-colors"
+            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-2 text-sm border border-ink-200 rounded-lg text-ink-700 hover:bg-ink-50 transition-colors"
           >
             <Printer size={14} /> Print
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-ink-900 text-cream rounded-lg hover:bg-ink-700 transition-colors"
+            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-2 text-sm bg-ink-900 text-cream rounded-lg hover:bg-ink-700 transition-colors"
           >
             <Download size={14} /> Save PDF
           </button>
@@ -93,13 +97,13 @@ export default function ResultPage() {
       </div>
 
       {/* Cost Sheet */}
-      <div className="max-w-4xl mx-auto px-6 pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
         <div
           ref={printRef}
           className="print-page bg-white rounded-xl border border-ink-100 overflow-hidden animate-fade-up opacity-0-init"
         >
           {/* Header Bar */}
-          <div className="bg-ink-900 px-8 py-6 flex items-center justify-between">
+          <div className="bg-ink-900 px-4 sm:px-8 py-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-clay-500 rounded flex items-center justify-center">
                 <Scissors size={14} className="text-white" />
@@ -112,7 +116,7 @@ export default function ResultPage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-cream font-display text-xl font-semibold">
+              <p className="text-cream font-display text-lg sm:text-xl font-semibold">
                 COST SHEET
               </p>
               <p className="text-ink-400 text-xs font-mono">{ref}</p>
@@ -120,7 +124,7 @@ export default function ResultPage() {
           </div>
 
           {/* Order Info Row */}
-          <div className="bg-ink-50 px-8 py-4 flex flex-wrap gap-6 border-b border-ink-100">
+          <div className="bg-ink-50 px-4 sm:px-8 py-4 flex flex-wrap gap-4 sm:gap-6 border-b border-ink-100">
             <div>
               <p className="text-xs text-ink-400 uppercase tracking-widest">
                 Date
@@ -146,9 +150,9 @@ export default function ResultPage() {
           {/* Body: Two columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-ink-100">
             {/* Left: Garment Spec */}
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
               {/* Garment visual */}
-              <div className="flex items-center gap-6 mb-8 pb-6 border-b border-ink-100">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-8 pb-6 border-b border-ink-100">
                 <div
                   className="w-28 h-28 rounded-xl flex items-center justify-center shrink-0"
                   style={{
@@ -262,7 +266,7 @@ export default function ResultPage() {
             </div>
 
             {/* Right: Cost Breakdown */}
-            <div className="p-8 flex flex-col">
+            <div className="p-4 sm:p-8 flex flex-col">
               <p className="text-xs uppercase tracking-widest text-ink-400 mb-4">
                 Cost Breakdown
               </p>
@@ -310,7 +314,7 @@ export default function ResultPage() {
                   <p className="text-ink-400 text-xs uppercase tracking-widest mb-1">
                     Unit Price
                   </p>
-                  <p className="font-mono text-3xl font-bold text-cream">
+                  <p className="font-mono text-2xl sm:text-3xl font-bold text-cream">
                     Rs. {displayedCost.totalPerUnit.toLocaleString()}
                   </p>
                   <p className="text-ink-400 text-xs mt-1">per garment</p>
@@ -320,7 +324,7 @@ export default function ResultPage() {
                   <p className="text-sage-200 text-xs uppercase tracking-widest mb-1">
                     Total Order Value ({quantity.toLocaleString()} pcs)
                   </p>
-                  <p className="font-mono text-3xl font-bold text-white">
+                  <p className="font-mono text-2xl sm:text-3xl font-bold text-white">
                     Rs. {displayedCost.totalForQuantity.toLocaleString()}
                   </p>
                   <p className="text-sage-200 text-xs mt-1">
@@ -332,7 +336,7 @@ export default function ResultPage() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-ink-100 px-8 py-4 flex items-center justify-between bg-ink-50">
+          <div className="border-t border-ink-100 px-4 sm:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 bg-ink-50">
             <p className="text-xs text-ink-400">
               Generated by M.S.R. Apparels · {today}
             </p>
@@ -341,22 +345,22 @@ export default function ResultPage() {
         </div>
 
         {/* Actions below sheet */}
-        <div className="no-print flex items-center justify-center gap-4 mt-6">
+        <div className="no-print flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-4 mt-6">
           <button
             onClick={() => navigate("/design")}
-            className="flex items-center gap-2 px-5 py-2.5 text-sm border border-ink-200 rounded-lg text-ink-700 hover:bg-white transition-colors"
+            className="w-full sm:w-auto justify-center flex items-center gap-2 px-5 py-2.5 text-sm border border-ink-200 rounded-lg text-ink-700 hover:bg-white transition-colors"
           >
             <ArrowLeft size={13} /> Edit Design
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-5 py-2.5 text-sm bg-ink-900 text-cream rounded-lg hover:bg-ink-700 transition-colors"
+            className="w-full sm:w-auto justify-center flex items-center gap-2 px-5 py-2.5 text-sm bg-ink-900 text-cream rounded-lg hover:bg-ink-700 transition-colors"
           >
             <Printer size={13} /> Print / Save PDF
           </button>
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 px-5 py-2.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+            className="w-full sm:w-auto justify-center flex items-center gap-2 px-5 py-2.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
             Done
           </button>
