@@ -10,18 +10,35 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const wildcardToRegex = (pattern) =>
+  new RegExp(
+    `^${pattern
+      .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/\*/g, ".*")}$`,
+  );
+
+const allowedOriginRegexes = allowedOrigins
+  .filter((origin) => origin.includes("*"))
+  .map(wildcardToRegex);
+
 app.use(
   cors({
     origin: (origin, callback) => {
+      const isExplicitlyAllowed = allowedOrigins.includes(origin);
+      const isWildcardAllowed = allowedOriginRegexes.some((regex) =>
+        regex.test(origin || ""),
+      );
+
       if (
         !origin ||
         allowedOrigins.length === 0 ||
-        allowedOrigins.includes(origin)
+        isExplicitlyAllowed ||
+        isWildcardAllowed
       ) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      return callback(null, false);
     },
     credentials: true,
   }),
