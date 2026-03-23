@@ -1,22 +1,17 @@
 import express from "express";
 import {
   calculateAndSaveQuote,
+  getMyQuotes,
   uploadLogo,
 } from "../controllers/quoteController.js";
-import protect from "../middlewares/authMiddleware.js";
 import parseLogoUpload from "../middlewares/uploadMulter.js";
 import validateLogoUpload from "../middlewares/uploadValidation.js";
+import protect from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Only logged-in users can access this now
+router.get("/my", protect, getMyQuotes);
 router.post("/calculate", protect, calculateAndSaveQuote);
-router.post(
-  "/upload-logo",
-  protect,
-  parseLogoUpload,
-  validateLogoUpload,
-  uploadLogo,
-);
+router.post("/upload-logo", parseLogoUpload, validateLogoUpload, uploadLogo);
 
 export default router;

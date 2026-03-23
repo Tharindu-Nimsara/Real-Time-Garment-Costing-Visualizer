@@ -27,7 +27,7 @@ api.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // ─── Auth ────────────────────────────────────────────────
@@ -35,12 +35,14 @@ export const authAPI = {
   register: (name, email, password) =>
     api.post("/api/users/register", { name, email, password }),
 
-  login: (email, password) =>
-    api.post("/api/users/login", { email, password }),
+  login: (email, password) => api.post("/api/users/login", { email, password }),
 };
 
 // ─── Quotes ──────────────────────────────────────────────
 export const quotesAPI = {
+  // Get logged-in user's saved quotes
+  getMyQuotes: () => api.get("/api/quotes/my"),
+
   // Upload logo to Cloudinary — multipart/form-data
   uploadLogo: (file) => {
     const formData = new FormData();
@@ -58,17 +60,17 @@ export const quotesAPI = {
 
 // Map frontend garment type IDs → API productType enum
 export const GARMENT_TYPE_MAP = {
-  crewneck_tee:  "crewneckShortSleeves",
+  crewneck_tee: "crewneckShortSleeves",
   crewneck_long: "crewneckLongSleeves",
-  polo:          "poloCollar",
+  polo: "poloCollar",
 };
 
 // Map frontend logo position → API placement enum
 export const LOGO_PLACEMENT_MAP = {
-  chest:  "left_chest",
-  back:   "right_chest",
+  chest: "left_chest",
+  back: "right_chest",
   sleeve: "left_chest",
-  none:   "none",
+  none: "none",
 };
 
 export default api;

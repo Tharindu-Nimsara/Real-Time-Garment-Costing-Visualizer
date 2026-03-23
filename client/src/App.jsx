@@ -14,10 +14,38 @@ function AppShell() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/design" element={<ProtectedRoute><DesignPage /></ProtectedRoute>} />
-        <Route path="/costing" element={<ProtectedRoute><CostingPage /></ProtectedRoute>} />
-        <Route path="/result" element={<ProtectedRoute><ResultPage /></ProtectedRoute>} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/design"
+          element={
+            <ProtectedRoute>
+              <DesignPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/costing"
+          element={
+            <ProtectedRoute>
+              <CostingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/result"
+          element={
+            <ProtectedRoute>
+              <ResultPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

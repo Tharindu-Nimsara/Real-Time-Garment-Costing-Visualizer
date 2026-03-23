@@ -4,25 +4,45 @@ import { useApp } from "../context/AppContext";
 import CostSummaryCard from "../components/CostSummaryCard";
 import { STITCHING_OPTIONS, ACCESSORIES, PACKAGING } from "../data/costData";
 import {
-  ArrowRight, ArrowLeft, Save, Check, Upload,
-  AlertCircle, Loader, ImagePlus, X
+  ArrowRight,
+  ArrowLeft,
+  Save,
+  Check,
+  Upload,
+  AlertCircle,
+  Loader,
+  ImagePlus,
+  X,
 } from "lucide-react";
 
 function SectionLabel({ children }) {
-  return <p className="text-xs uppercase tracking-widest text-ink-400 mb-3 font-medium">{children}</p>;
+  return (
+    <p className="text-xs uppercase tracking-widest text-ink-400 mb-3 font-medium">
+      {children}
+    </p>
+  );
 }
 
 function CheckRow({ label, price, checked, onChange, accent = false }) {
   return (
-    <label className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${checked ? (accent ? "border-clay-300 bg-clay-50" : "border-sage-300 bg-sage-50") : "border-ink-100 hover:border-ink-200"}`}>
+    <label
+      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${checked ? (accent ? "border-clay-300 bg-clay-50" : "border-sage-300 bg-sage-50") : "border-ink-100 hover:border-ink-200"}`}
+    >
       <div className="flex items-center gap-3">
-        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${checked ? (accent ? "border-clay-500 bg-clay-500" : "border-sage-500 bg-sage-500") : "border-ink-300"}`}>
+        <div
+          className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${checked ? (accent ? "border-clay-500 bg-clay-500" : "border-sage-500 bg-sage-500") : "border-ink-300"}`}
+        >
           {checked && <Check size={10} className="text-white" />}
         </div>
         <span className="text-sm text-ink-700">{label}</span>
       </div>
       <span className="font-mono text-xs text-ink-500">Rs. {price}</span>
-      <input type="checkbox" checked={checked} onChange={onChange} className="sr-only" />
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className="sr-only"
+      />
     </label>
   );
 }
@@ -35,23 +55,32 @@ export default function CostingPage() {
   const logoInputRef = useRef(null);
 
   const {
-    stitchingId, setStitchingId,
-    shirtsPerKg, setShirtsPerKg,
-    selectedAccessories, toggleAccessory,
-    selectedPackaging, togglePackaging,
-    margin, setMargin,
-    quantity, setQuantity,
-    sizes, updateSizeQty, sizesTotal, sizesValid,
-    additionalCost, setAdditionalCost,
-    buyerName, setBuyerName,
-    orderRef, setOrderRef,
-    currentCost,
+    stitchingId,
+    setStitchingId,
+    shirtsPerKg,
+    setShirtsPerKg,
+    selectedAccessories,
+    toggleAccessory,
+    selectedPackaging,
+    togglePackaging,
+    quantity,
+    sizes,
+    updateSizeQty,
+    sizesTotal,
+    sizesValid,
+    displayedCost,
     saveDesign,
-    hasLogo, setHasLogo,
-    logoPosition, setLogoPosition,
-    logoUrl, logoUploadLoading, logoUploadError,
+    hasLogo,
+    setHasLogo,
+    logoPosition,
+    setLogoPosition,
+    logoUrl,
+    logoUploadLoading,
+    logoUploadError,
     uploadLogo,
-    submitQuote, quoteLoading, quoteError,
+    submitQuote,
+    quoteLoading,
+    quoteError,
   } = useApp();
 
   const handleLogoFileChange = async (e) => {
@@ -81,111 +110,152 @@ export default function CostingPage() {
   return (
     <div className="min-h-screen bg-cream pt-14">
       <div className="max-w-7xl mx-auto px-6 py-10">
-
         {/* Header */}
         <div className="flex items-end justify-between mb-8 animate-fade-up opacity-0-init">
           <div>
-            <p className="text-ink-400 text-xs uppercase tracking-widest mb-1">Step 02</p>
-            <h1 className="font-display text-4xl font-semibold text-ink-900">Costing</h1>
+            <p className="text-ink-400 text-xs uppercase tracking-widest mb-1">
+              Step 02
+            </p>
+            <h1 className="font-display text-4xl font-semibold text-ink-900">
+              Costing
+            </h1>
           </div>
-          <button onClick={() => navigate("/design")} className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-700 transition-colors">
+          <button
+            onClick={() => navigate("/design")}
+            className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-700 transition-colors"
+          >
             <ArrowLeft size={13} /> Back to Design
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-
             {/* Order Info */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "80ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "80ms" }}
+            >
               <SectionLabel>Order Information</SectionLabel>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs text-ink-400 mb-1.5 block">Buyer Name</label>
-                  <input type="text" value={buyerName} onChange={(e) => setBuyerName(e.target.value)}
-                    placeholder="e.g. Marks & Spencer"
-                    className="w-full px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800 placeholder:text-ink-300" />
-                </div>
-                <div>
-                  <label className="text-xs text-ink-400 mb-1.5 block">Order Reference</label>
-                  <input type="text" value={orderRef} onChange={(e) => setOrderRef(e.target.value)}
-                    placeholder="e.g. PO-2026-001"
-                    className="w-full px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800 placeholder:text-ink-300" />
-                </div>
-                <div>
-                  <label className="text-xs text-ink-400 mb-1.5 block">Total Quantity (pcs)</label>
-                  <input type="number" value={quantity} min="1"
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800" />
-                </div>
-                <div>
-                  <label className="text-xs text-ink-400 mb-1.5 block">Shirts per KG <span className="text-ink-300">(yield)</span></label>
-                  <input type="number" value={shirtsPerKg} min="1" step="0.5"
-                    onChange={(e) => setShirtsPerKg(Math.max(1, parseFloat(e.target.value) || 1))}
-                    className="w-full px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800" />
-                  <p className="text-xs text-ink-300 mt-1">Default: 4 shirts/kg</p>
+                  <label className="text-xs text-ink-400 mb-1.5 block">
+                    Shirts per KG <span className="text-ink-300">(yield)</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={shirtsPerKg}
+                    min="1"
+                    step="0.5"
+                    onChange={(e) =>
+                      setShirtsPerKg(
+                        Math.max(1, parseFloat(e.target.value) || 1),
+                      )
+                    }
+                    className="w-full px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800"
+                  />
+                  <p className="text-xs text-ink-300 mt-1">
+                    Default: 4 shirts/kg
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Size Distribution — required by API */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "120ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "120ms" }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <SectionLabel>Size Distribution</SectionLabel>
-                <div className={`flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-lg ${sizesValid ? "bg-sage-50 text-sage-600" : "bg-clay-50 text-clay-600"}`}>
+                <div
+                  className={`flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-lg ${sizesValid ? "bg-sage-50 text-sage-600" : "bg-clay-50 text-clay-600"}`}
+                >
                   {sizesTotal} / {quantity} pcs
-                  {sizesValid ? <Check size={11} /> : <AlertCircle size={11} />}
+                  <Check size={11} />
                 </div>
               </div>
               <p className="text-xs text-ink-400 mb-4">
-                Total qty across all sizes must equal <span className="font-mono font-medium text-ink-700">{quantity}</span> pcs.
+                Total quantity is auto-calculated by adding all size quantities.
               </p>
               <div className="grid grid-cols-4 gap-3">
                 {sizes.map(({ size, qty }) => (
                   <div key={size}>
-                    <label className="text-xs text-ink-400 mb-1.5 block text-center">{size}</label>
-                    <input type="number" value={qty} min="0"
+                    <label className="text-xs text-ink-400 mb-1.5 block text-center">
+                      {size}
+                    </label>
+                    <input
+                      type="number"
+                      value={qty}
+                      min="0"
                       onChange={(e) => updateSizeQty(size, e.target.value)}
-                      className={`w-full px-3 py-2.5 text-sm text-center border rounded-lg focus:outline-none transition-all bg-white text-ink-800 ${!sizesValid && qty > 0 ? "border-clay-300 focus:border-clay-400" : "border-ink-200 focus:border-ink-500"}`} />
+                      className={`w-full px-3 py-2.5 text-sm text-center border rounded-lg focus:outline-none transition-all bg-white text-ink-800 ${!sizesValid && qty > 0 ? "border-clay-300 focus:border-clay-400" : "border-ink-200 focus:border-ink-500"}`}
+                    />
                   </div>
                 ))}
               </div>
               {!sizesValid && sizesTotal > 0 && (
                 <p className="text-xs text-clay-500 mt-2 flex items-center gap-1">
                   <AlertCircle size={11} />
-                  {sizesTotal > quantity ? `${sizesTotal - quantity} pcs over` : `${quantity - sizesTotal} pcs remaining`}
+                  Enter at least 1 piece across sizes to continue.
                 </p>
               )}
             </div>
 
             {/* Stitching */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "160ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "160ms" }}
+            >
               <SectionLabel>Stitching Type</SectionLabel>
               <div className="space-y-2">
                 {STITCHING_OPTIONS.map((s) => (
-                  <label key={s.id}
-                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${stitchingId === s.id ? "border-ink-900 bg-ink-50" : "border-ink-100 hover:border-ink-300"}`}>
+                  <label
+                    key={s.id}
+                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${stitchingId === s.id ? "border-ink-900 bg-ink-50" : "border-ink-100 hover:border-ink-300"}`}
+                  >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 ${stitchingId === s.id ? "border-ink-900 bg-ink-900" : "border-ink-300"}`} />
-                      <span className="text-sm font-medium text-ink-700">{s.label}</span>
+                      <div
+                        className={`w-4 h-4 rounded-full border-2 ${stitchingId === s.id ? "border-ink-900 bg-ink-900" : "border-ink-300"}`}
+                      />
+                      <span className="text-sm font-medium text-ink-700">
+                        {s.label}
+                      </span>
                     </div>
-                    <span className="font-mono text-sm text-ink-600">Rs. {s.price}</span>
-                    <input type="radio" name="stitching" value={s.id} checked={stitchingId === s.id} onChange={() => setStitchingId(s.id)} className="sr-only" />
+                    <span className="font-mono text-sm text-ink-600">
+                      Rs. {s.price}
+                    </span>
+                    <input
+                      type="radio"
+                      name="stitching"
+                      value={s.id}
+                      checked={stitchingId === s.id}
+                      onChange={() => setStitchingId(s.id)}
+                      className="sr-only"
+                    />
                   </label>
                 ))}
               </div>
             </div>
 
             {/* Logo Upload — calls /api/quotes/upload-logo */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "200ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "200ms" }}
+            >
               <div className="flex items-center justify-between mb-4">
                 <SectionLabel>Branding / Logo</SectionLabel>
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <div onClick={() => setHasLogo(!hasLogo)}
-                    className={`w-10 h-5 rounded-full transition-colors relative ${hasLogo ? "bg-clay-500" : "bg-ink-200"}`}>
-                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${hasLogo ? "translate-x-5" : "translate-x-0.5"}`} />
+                  <div
+                    onClick={() => setHasLogo(!hasLogo)}
+                    className={`w-10 h-5 rounded-full transition-colors relative ${hasLogo ? "bg-clay-500" : "bg-ink-200"}`}
+                  >
+                    <div
+                      className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${hasLogo ? "translate-x-5" : "translate-x-0.5"}`}
+                    />
                   </div>
-                  <span className="text-sm text-ink-600">{hasLogo ? "On" : "Off"}</span>
+                  <span className="text-sm text-ink-600">
+                    {hasLogo ? "On" : "Off"}
+                  </span>
                 </label>
               </div>
 
@@ -193,15 +263,24 @@ export default function CostingPage() {
                 <div className="space-y-4 animate-fade-in opacity-0-init">
                   {/* Placement */}
                   <div>
-                    <label className="text-xs text-ink-400 mb-2 block">Placement</label>
+                    <label className="text-xs text-ink-400 mb-2 block">
+                      Placement
+                    </label>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         { id: "chest", label: "Left Chest", api: "left_chest" },
-                        { id: "back", label: "Right Chest", api: "right_chest" },
+                        {
+                          id: "back",
+                          label: "Right Chest",
+                          api: "right_chest",
+                        },
                         { id: "sleeve", label: "Sleeve", api: "left_chest" },
                       ].map((pos) => (
-                        <button key={pos.id} onClick={() => setLogoPosition(pos.id)}
-                          className={`py-2 text-sm rounded-lg border transition-all ${logoPosition === pos.id ? "border-clay-500 bg-clay-50 text-clay-700" : "border-ink-100 text-ink-500 hover:border-ink-300"}`}>
+                        <button
+                          key={pos.id}
+                          onClick={() => setLogoPosition(pos.id)}
+                          className={`py-2 text-sm rounded-lg border transition-all ${logoPosition === pos.id ? "border-clay-500 bg-clay-50 text-clay-700" : "border-ink-100 text-ink-500 hover:border-ink-300"}`}
+                        >
                           {pos.label}
                         </button>
                       ))}
@@ -211,27 +290,58 @@ export default function CostingPage() {
                   {/* File Upload */}
                   <div>
                     <label className="text-xs text-ink-400 mb-2 block">
-                      Upload Logo <span className="text-ink-300">(JPG, PNG, WEBP — max 5MB)</span>
+                      Upload Logo{" "}
+                      <span className="text-ink-300">
+                        (JPG, PNG, WEBP — max 5MB)
+                      </span>
                     </label>
-                    <input ref={logoInputRef} type="file" accept=".jpg,.jpeg,.png,.webp"
-                      onChange={handleLogoFileChange} className="sr-only" />
+                    <input
+                      ref={logoInputRef}
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp"
+                      onChange={handleLogoFileChange}
+                      className="sr-only"
+                    />
 
                     {!logoUrl ? (
-                      <button onClick={() => logoInputRef.current?.click()} disabled={logoUploadLoading}
-                        className="w-full border-2 border-dashed border-ink-200 rounded-xl py-6 flex flex-col items-center gap-2 hover:border-ink-400 transition-colors disabled:opacity-50">
-                        {logoUploadLoading
-                          ? <Loader size={20} className="text-ink-400 animate-spin" />
-                          : <ImagePlus size={20} className="text-ink-400" />}
+                      <button
+                        onClick={() => logoInputRef.current?.click()}
+                        disabled={logoUploadLoading}
+                        className="w-full border-2 border-dashed border-ink-200 rounded-xl py-6 flex flex-col items-center gap-2 hover:border-ink-400 transition-colors disabled:opacity-50"
+                      >
+                        {logoUploadLoading ? (
+                          <Loader
+                            size={20}
+                            className="text-ink-400 animate-spin"
+                          />
+                        ) : (
+                          <ImagePlus size={20} className="text-ink-400" />
+                        )}
                         <span className="text-sm text-ink-400">
-                          {logoUploadLoading ? "Uploading..." : "Click to upload logo"}
+                          {logoUploadLoading
+                            ? "Uploading..."
+                            : "Click to upload logo"}
                         </span>
                       </button>
                     ) : (
                       <div className="flex items-center gap-3 p-3 bg-sage-50 border border-sage-200 rounded-xl">
                         <Check size={14} className="text-sage-600 shrink-0" />
-                        <p className="text-sm text-sage-700 flex-1 truncate">Logo uploaded successfully</p>
-                        <button onClick={() => { logoInputRef.current.value = ""; }}
-                          className="text-ink-400 hover:text-ink-600 transition-colors">
+                        <div className="w-10 h-10 rounded-lg border border-sage-200 bg-white flex items-center justify-center overflow-hidden shrink-0">
+                          <img
+                            src={logoUrl}
+                            alt="Uploaded logo"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <p className="text-sm text-sage-700 flex-1 truncate">
+                          Logo uploaded successfully
+                        </p>
+                        <button
+                          onClick={() => {
+                            logoInputRef.current.value = "";
+                          }}
+                          className="text-ink-400 hover:text-ink-600 transition-colors"
+                        >
                           <X size={14} />
                         </button>
                       </div>
@@ -248,67 +358,59 @@ export default function CostingPage() {
             </div>
 
             {/* Accessories */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "240ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "240ms" }}
+            >
               <SectionLabel>Embroidery & Trims</SectionLabel>
               <div className="space-y-2">
                 {ACCESSORIES.map((a) => (
-                  <CheckRow key={a.id} label={a.label} price={a.price}
-                    checked={selectedAccessories.includes(a.id)} onChange={() => toggleAccessory(a.id)} />
+                  <CheckRow
+                    key={a.id}
+                    label={a.label}
+                    price={a.price}
+                    checked={selectedAccessories.includes(a.id)}
+                    onChange={() => toggleAccessory(a.id)}
+                  />
                 ))}
               </div>
             </div>
 
             {/* Packaging */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "300ms" }}>
+            <div
+              className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init"
+              style={{ animationDelay: "300ms" }}
+            >
               <SectionLabel>Packaging & Transport</SectionLabel>
               <div className="space-y-2">
                 {PACKAGING.map((p) => (
-                  <CheckRow key={p.id} label={p.label} price={p.price}
-                    checked={selectedPackaging.includes(p.id)} onChange={() => togglePackaging(p.id)} accent />
+                  <CheckRow
+                    key={p.id}
+                    label={p.label}
+                    price={p.price}
+                    checked={selectedPackaging.includes(p.id)}
+                    onChange={() => togglePackaging(p.id)}
+                    accent
+                  />
                 ))}
-              </div>
-            </div>
-
-            {/* Additional Cost — maps to API additionalCost field */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "340ms" }}>
-              <SectionLabel>Additional Cost</SectionLabel>
-              <p className="text-xs text-ink-400 mb-3">Any extra cost not covered above (special finishing, customs, etc.)</p>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-ink-500 font-mono shrink-0">Rs.</span>
-                <input type="number" value={additionalCost} min="0" step="50"
-                  onChange={(e) => setAdditionalCost(parseFloat(e.target.value) || 0)}
-                  placeholder="0"
-                  className="flex-1 px-3 py-2 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 bg-white text-ink-800" />
-              </div>
-            </div>
-
-            {/* Margin */}
-            <div className="bg-white rounded-xl border border-ink-100 p-5 animate-fade-up opacity-0-init" style={{ animationDelay: "380ms" }}>
-              <div className="flex items-center justify-between mb-3">
-                <SectionLabel>Profit Margin</SectionLabel>
-                <span className="font-mono text-sm font-semibold text-clay-600">{margin}%</span>
-              </div>
-              <input type="range" min="0" max="60" step="1" value={margin}
-                onChange={(e) => setMargin(parseInt(e.target.value))} className="w-full accent-clay-500" />
-              <div className="flex justify-between text-xs text-ink-300 mt-1">
-                <span>0%</span><span>30%</span><span>60%</span>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <span className="text-xs text-ink-400">Margin amount:</span>
-                <span className="font-mono text-xs font-semibold text-clay-600">Rs. {currentCost.marginAmount.toLocaleString()} per unit</span>
               </div>
             </div>
           </div>
 
           {/* Right: Cost Panel */}
-          <div className="space-y-5 animate-fade-up opacity-0-init" style={{ animationDelay: "100ms" }}>
+          <div
+            className="space-y-5 animate-fade-up opacity-0-init"
+            style={{ animationDelay: "100ms" }}
+          >
             <CostSummaryCard />
 
             {/* Sizes validation warning */}
-            {!sizesValid && sizesTotal > 0 && (
+            {!sizesValid && (
               <div className="flex items-center gap-2 p-3 bg-clay-50 border border-clay-200 rounded-xl">
                 <AlertCircle size={14} className="text-clay-500 shrink-0" />
-                <p className="text-xs text-clay-600">Size distribution must equal {quantity} pcs before submitting.</p>
+                <p className="text-xs text-clay-600">
+                  Enter size quantities before submitting.
+                </p>
               </div>
             )}
 
@@ -321,18 +423,36 @@ export default function CostingPage() {
             )}
 
             {/* Save locally */}
-            <button onClick={() => setShowSaveModal(true)}
-              className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-medium border transition-all ${saved ? "bg-sage-50 border-sage-300 text-sage-700" : "border-ink-200 text-ink-700 hover:border-ink-400"}`}>
-              {saved ? <><Check size={15} /> Saved!</> : <><Save size={15} /> Save Locally</>}
+            <button
+              onClick={() => setShowSaveModal(true)}
+              className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-medium border transition-all ${saved ? "bg-sage-50 border-sage-300 text-sage-700" : "border-ink-200 text-ink-700 hover:border-ink-400"}`}
+            >
+              {saved ? (
+                <>
+                  <Check size={15} /> Saved!
+                </>
+              ) : (
+                <>
+                  <Save size={15} /> Save Locally
+                </>
+              )}
             </button>
 
             {/* Generate Result — calls API */}
-            <button onClick={handleGenerateResult}
+            <button
+              onClick={handleGenerateResult}
               disabled={quoteLoading || !sizesValid || (hasLogo && !logoUrl)}
-              className="w-full flex items-center justify-center gap-2 bg-clay-500 text-white py-3 rounded-xl font-medium hover:bg-clay-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              {quoteLoading
-                ? <><Loader size={15} className="animate-spin" /> Calculating...</>
-                : <>Generate Result <ArrowRight size={15} /></>}
+              className="w-full flex items-center justify-center gap-2 bg-clay-500 text-white py-3 rounded-xl font-medium hover:bg-clay-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {quoteLoading ? (
+                <>
+                  <Loader size={15} className="animate-spin" /> Calculating...
+                </>
+              ) : (
+                <>
+                  Generate Result <ArrowRight size={15} />
+                </>
+              )}
             </button>
 
             {hasLogo && !logoUrl && (
@@ -343,14 +463,30 @@ export default function CostingPage() {
 
             {/* Quick summary */}
             <div className="bg-ink-50 rounded-xl p-4 space-y-2">
-              <p className="text-xs uppercase tracking-widest text-ink-400 mb-3">Quick Summary</p>
+              <p className="text-xs uppercase tracking-widest text-ink-400 mb-3">
+                Quick Summary
+              </p>
               {[
-                { label: "Fabric", value: `Rs. ${currentCost.breakdown.fabric}` },
-                { label: "Stitching", value: `Rs. ${currentCost.breakdown.stitching}` },
-                { label: "Accessories", value: `Rs. ${currentCost.breakdown.accessories}` },
-                { label: "Packaging", value: `Rs. ${currentCost.breakdown.packaging}` },
-                { label: "Additional", value: `Rs. ${additionalCost}` },
-                { label: "Margin", value: `${margin}%` },
+                {
+                  label: "Fabric",
+                  value: `Rs. ${displayedCost.breakdown.fabric.toLocaleString()}`,
+                },
+                {
+                  label: "Stitching",
+                  value: `Rs. ${displayedCost.breakdown.stitching.toLocaleString()}`,
+                },
+                {
+                  label: "Accessories",
+                  value: `Rs. ${displayedCost.breakdown.accessories.toLocaleString()}`,
+                },
+                {
+                  label: "Packaging",
+                  value: `Rs. ${displayedCost.breakdown.packaging.toLocaleString()}`,
+                },
+                {
+                  label: "Wastage + Margin",
+                  value: `Rs. ${(displayedCost.totalPerUnit - displayedCost.subtotal).toLocaleString()}`,
+                },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between text-xs">
                   <span className="text-ink-500">{label}</span>
@@ -366,14 +502,32 @@ export default function CostingPage() {
       {showSaveModal && (
         <div className="fixed inset-0 bg-ink-900/50 flex items-center justify-center z-50 p-4 animate-fade-in opacity-0-init">
           <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-xl animate-fade-up opacity-0-init">
-            <h3 className="font-display text-lg font-semibold text-ink-900 mb-4">Save Design</h3>
-            <input type="text" value={designName} onChange={(e) => setDesignName(e.target.value)}
-              placeholder="e.g. Summer Polo – Navy" autoFocus
+            <h3 className="font-display text-lg font-semibold text-ink-900 mb-4">
+              Save Design
+            </h3>
+            <input
+              type="text"
+              value={designName}
+              onChange={(e) => setDesignName(e.target.value)}
+              placeholder="e.g. Summer Polo – Navy"
+              autoFocus
               className="w-full px-3 py-2.5 text-sm border border-ink-200 rounded-lg focus:outline-none focus:border-ink-500 mb-4"
-              onKeyDown={(e) => e.key === "Enter" && handleSave()} />
+              onKeyDown={(e) => e.key === "Enter" && handleSave()}
+            />
             <div className="flex gap-3">
-              <button onClick={() => setShowSaveModal(false)} className="flex-1 py-2.5 text-sm border border-ink-200 rounded-lg text-ink-600 hover:bg-ink-50 transition-colors">Cancel</button>
-              <button onClick={handleSave} disabled={!designName.trim()} className="flex-1 py-2.5 text-sm bg-ink-900 text-cream rounded-lg font-medium hover:bg-ink-700 transition-colors disabled:opacity-40">Save</button>
+              <button
+                onClick={() => setShowSaveModal(false)}
+                className="flex-1 py-2.5 text-sm border border-ink-200 rounded-lg text-ink-600 hover:bg-ink-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={!designName.trim()}
+                className="flex-1 py-2.5 text-sm bg-ink-900 text-cream rounded-lg font-medium hover:bg-ink-700 transition-colors disabled:opacity-40"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>

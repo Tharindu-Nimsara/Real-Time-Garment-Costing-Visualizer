@@ -5,9 +5,10 @@ const quoteSchema = new Schema(
     quoteId: { type: String, required: true, unique: true },
 
     // This creates the relationship to the User collection
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: false },
 
     productType: { type: String, required: true },
+    tshirtColor: { type: String, default: "" },
     quantity: { type: Number, required: true },
 
     sizes: [

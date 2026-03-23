@@ -1,5 +1,6 @@
 import express, { json } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./src/config/db.js";
 import quoteRoutes from "./src/routes/quoteRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
@@ -11,6 +12,7 @@ const app = express();
 const PORT = 5000;
 
 // Middleware to parse JSON
+app.use(cors());
 app.use(json());
 
 // Basic Route

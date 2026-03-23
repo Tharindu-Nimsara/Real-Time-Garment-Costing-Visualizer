@@ -2,6 +2,17 @@ import PricingConfig from "../models/PricingConfig.js";
 import Quote from "../models/Quote.js";
 import { getCloudinary } from "../utils/cloudinaryConfig.js";
 
+export const getMyQuotes = async (req, res) => {
+  try {
+    const quotes = await Quote.find({ userId: req.user._id }).sort({
+      createdAt: -1,
+    });
+    return res.status(200).json(quotes);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const uploadLogo = async (req, res) => {
   try {
     const cloudinary = getCloudinary();
@@ -39,6 +50,7 @@ export const calculateAndSaveQuote = async (req, res) => {
   try {
     const {
       productType,
+      tshirtColor,
       fabricName,
       quantity,
       shirtsPerKg,
@@ -59,8 +71,8 @@ export const calculateAndSaveQuote = async (req, res) => {
       });
     }
 
-    // 1. Get the User ID from the Auth Middleware (req.user is set by protect)
-    const userId = req.user._id;
+    // 1. Get the User ID when request is authenticated; keep quote public otherwise
+    const userId = req.user?._id;
 
     // 2. Fetch Pricing Rules
     const config = await PricingConfig.findOne();
@@ -108,6 +120,7 @@ export const calculateAndSaveQuote = async (req, res) => {
       quoteId: `MSR-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
       userId, // Linked to the authenticated user
       productType,
+      tshirtColor: tshirtColor || "",
       quantity,
       sizes,
       fabricDetails: { fabricName, shirtsPerKg },
