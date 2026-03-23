@@ -1,11 +1,27 @@
-export default function GarmentPreview({ color = "#FFFFFF", type = "crewneck_tee", hasLogo = false, logoPosition = "chest", size = 280 }) {
+export default function GarmentPreview({
+  color = "#FFFFFF",
+  type = "crewneck_tee",
+  hasLogo = false,
+  logoPosition = "chest",
+  size = 280,
+}) {
   const isDark = isColorDark(color);
   const strokeColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)";
   const shadowColor = isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.1)";
-  const highlightColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.7)";
+  const highlightColor = isDark
+    ? "rgba(255,255,255,0.06)"
+    : "rgba(255,255,255,0.7)";
 
   const isPolo = type === "polo";
   const isLong = type === "crewneck_long";
+  const bodyPath =
+    "M72 55 L30 80 L38 115 L65 105 L65 240 L195 240 L195 105 L222 115 L230 80 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z";
+  const longBodyPath =
+    "M72 55 L52 78 L48 115 L65 105 L65 240 L195 240 L195 105 L212 115 L208 78 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z";
+  const leftLongSleevePath =
+    "M50 101 C43 115 38 139 35 163 C39 175 43 184 49 191 C56 180 61 166 65 149 L65 95 Z";
+  const rightLongSleevePath =
+    "M210 101 C217 115 222 139 225 163 C221 175 217 184 211 191 C204 180 199 166 195 149 L195 95 Z";
 
   // Logo positions mapped to SVG coords
   const logoCoords = {
@@ -32,23 +48,41 @@ export default function GarmentPreview({ color = "#FFFFFF", type = "crewneck_tee
 
       {/* Body */}
       <path
-        d={isLong
-          ? "M72 55 L30 80 L38 115 L65 105 L65 275 L195 275 L195 105 L222 115 L230 80 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z"
-          : "M72 55 L30 80 L38 115 L65 105 L65 240 L195 240 L195 105 L222 115 L230 80 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z"
-        }
+        d={isLong ? longBodyPath : bodyPath}
         fill={color}
         stroke={strokeColor}
         strokeWidth="1.5"
       />
 
+      {isLong && (
+        <>
+          <path
+            d={leftLongSleevePath}
+            fill={color}
+            stroke={strokeColor}
+            strokeWidth="1.2"
+          />
+          <path
+            d={rightLongSleevePath}
+            fill={color}
+            stroke={strokeColor}
+            strokeWidth="1.2"
+          />
+        </>
+      )}
+
       {/* Highlight overlay */}
       <path
-        d={isLong
-          ? "M72 55 L30 80 L38 115 L65 105 L65 275 L195 275 L195 105 L222 115 L230 80 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z"
-          : "M72 55 L30 80 L38 115 L65 105 L65 240 L195 240 L195 105 L222 115 L230 80 L188 55 L175 42 C165 35 130 32 130 32 C130 32 95 35 85 42 Z"
-        }
+        d={isLong ? longBodyPath : bodyPath}
         fill={`url(#bodyGrad-${type})`}
       />
+
+      {isLong && (
+        <>
+          <path d={leftLongSleevePath} fill={`url(#bodyGrad-${type})`} />
+          <path d={rightLongSleevePath} fill={`url(#bodyGrad-${type})`} />
+        </>
+      )}
 
       {/* Neckline */}
       {isPolo ? (
@@ -82,15 +116,52 @@ export default function GarmentPreview({ color = "#FFFFFF", type = "crewneck_tee
       )}
 
       {/* Sleeve seam lines */}
-      <line x1="65" y1="105" x2="65" y2={isLong ? "200" : "155"} stroke={strokeColor} strokeWidth="0.8" strokeDasharray="3 3" />
-      <line x1="195" y1="105" x2="195" y2={isLong ? "200" : "155"} stroke={strokeColor} strokeWidth="0.8" strokeDasharray="3 3" />
+      {isLong ? (
+        <>
+          <path
+            d="M63 96 C60 119 58 146 56 173"
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="0.8"
+            strokeDasharray="3 3"
+          />
+          <path
+            d="M197 96 C200 119 202 146 204 173"
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="0.8"
+            strokeDasharray="3 3"
+          />
+        </>
+      ) : (
+        <>
+          <line
+            x1="65"
+            y1="105"
+            x2="65"
+            y2="155"
+            stroke={strokeColor}
+            strokeWidth="0.8"
+            strokeDasharray="3 3"
+          />
+          <line
+            x1="195"
+            y1="105"
+            x2="195"
+            y2="155"
+            stroke={strokeColor}
+            strokeWidth="0.8"
+            strokeDasharray="3 3"
+          />
+        </>
+      )}
 
       {/* Hem line */}
       <line
         x1="67"
-        y1={isLong ? "272" : "237"}
+        y1="237"
         x2="193"
-        y2={isLong ? "272" : "237"}
+        y2="237"
         stroke={strokeColor}
         strokeWidth="1"
         strokeDasharray="4 3"
@@ -99,7 +170,12 @@ export default function GarmentPreview({ color = "#FFFFFF", type = "crewneck_tee
       {/* Logo / embroidery */}
       {hasLogo && (
         <g transform={`translate(${logo.x}, ${logo.y})`}>
-          <rect x="-14" y="-10" width="28" height="20" rx="3"
+          <rect
+            x="-14"
+            y="-10"
+            width="28"
+            height="20"
+            rx="3"
             fill={isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)"}
             stroke={isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.2)"}
             strokeWidth="0.8"
@@ -120,8 +196,20 @@ export default function GarmentPreview({ color = "#FFFFFF", type = "crewneck_tee
       {/* Rib cuffs for long sleeve */}
       {isLong && (
         <>
-          <path d="M30 80 Q28 110 38 115" fill="none" stroke={strokeColor} strokeWidth="0.8" strokeDasharray="2 2" />
-          <path d="M230 80 Q232 110 222 115" fill="none" stroke={strokeColor} strokeWidth="0.8" strokeDasharray="2 2" />
+          <path
+            d="M38 173 C41 181 45 187 49 191"
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="1"
+            strokeDasharray="2 2"
+          />
+          <path
+            d="M222 173 C219 181 215 187 211 191"
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="1"
+            strokeDasharray="2 2"
+          />
         </>
       )}
     </svg>
